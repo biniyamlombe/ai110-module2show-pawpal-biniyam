@@ -2,6 +2,12 @@
 
 ## 1. System Design
 
+**Core Actions**
+Based on the scenario, the three core actions a user should be able to perform are:
+1. Add owner and pet information (including constraints like available time).
+2. Add, view, or manage specific pet care tasks with duration and priority.
+3. Generate and view a daily schedule that intelligently prioritizes and orders tasks based on available time.
+
 **a. Initial design**
 
 - Briefly describe your initial UML design.
