@@ -30,6 +30,13 @@ Based on the scenario, the three core actions a user should be able to perform a
     - Initially I considered embedding scheduling helpers directly in the UI module, but I refactored into a dedicated Scheduler class/module. Reason: improved testability, clearer separation of concerns, and easier local unit testing without the UI.
 - If yes, describe at least one change and why you made it.
     - If time windows or recurring tasks are added, Task will gain start/end window attributes and Scheduler will need a timeline builder component.
+- Additional changes made during implementation:
+    - Moved scheduling logic out of app UI into pawpal_system.py (Scheduler class) for separation of concerns and easier testing.
+    - Added an Owner.start_minute attribute so generated start_minute/end_minute map to a real point in the owner's day (default 0). This makes it easier to present schedule items as clock times later.
+    - Added validation in Scheduler.validate_tasks to catch non-positive durations and unknown priority values (high|medium|low) early.
+    - Created a small demo script (pawpal_demo.py) to run the scheduler locally without committing tests. Tests were written initially for local verification but not pushed per preference.
+    - Converted the Mermaid content into a .mmd/.js safe export (Mermaid.js now exports a template string or saved as pawpal_diagram.mmd) to remove syntax errors.
+    - Added a minimal __init__.py to the repo root to make pawpal_system import paths simpler.
 
 **c. Main objects (building blocks)**
 

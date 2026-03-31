@@ -1,66 +1,63 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Tuple
+from typing import List
+
 
 @dataclass
-class Owner:
-    name: str
-    available_minutes: int = 8 * 60
-    preferences: Dict[str, str] = field(default_factory=dict)
+class Task:
+    description: str
+    time: str
+    frequency: str
+    completed: bool = False
 
-    def update_availability(self, minutes: int) -> None:
-        self.available_minutes = minutes
+    def mark_complete(self) -> None:
+        """Mark the task as completed."""
+        self.completed = True
 
-    def set_preference(self, key: str, value: str) -> None:
-        self.preferences[key] = value
 
 @dataclass
 class Pet:
     name: str
-    species: str = "dog"
-    needs: List[str] = field(default_factory=list)
+    species: str
+    age: int
+    tasks: List[Task] = field(default_factory=list)
 
-    def add_need(self, need: str) -> None:
-        self.needs.append(need)
+    def add_task(self, task: Task) -> None:
+        """Add a task to this pet's task list."""
+        self.tasks.append(task)
 
-    def remove_need(self, need: str) -> None:
-        if need in self.needs:
-            self.needs.remove(need)
+    def get_tasks(self) -> List[Task]:
+        """Return all tasks assigned to this pet."""
+        return self.tasks
 
-@dataclass
-class Task:
-    title: str
-    duration_minutes: int
-    priority: str = "medium"
-    preferred_time: Optional[str] = None
-    recurrence: Optional[str] = None
-
-    def is_recurring(self) -> bool:
-        return bool(self.recurrence)
-
-    def fits_in(self, minutes_available: int) -> bool:
-        return self.duration_minutes <= minutes_available
 
 @dataclass
-class ScheduleItem:
-    task: Task
-    start_minute: Optional[int] = None
-    end_minute: Optional[int] = None
+class Owner:
+    name: str
+    pets: List[Pet] = field(default_factory=list)
 
-    def duration(self) -> int:
-        return self.task.duration_minutes
+    def add_pet(self, pet: Pet) -> None:
+        """Add a pet to the owner's list of pets."""
+        self.pets.append(pet)
+
+    def get_all_tasks(self) -> List[tuple[Pet, Task]]:
+        """Collect every task for every pet owned."""
+        all_tasks: List[tuple[Pet, Task]] = []
+        for pet in self.pets:
+            for task in pet.tasks:
+                all_tasks.append((pet, task))
+        return all_tasks
+
 
 class Scheduler:
-    PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2}
+    def get_all_tasks(self, owner: Owner) -> List[tuple[Pet, Task]]:
+        """Retrieve every pet task managed by an owner."""
+        return owner.get_all_tasks()
 
-    def validate_tasks(self, tasks: List[Task]) -> List[str]:
-        errors = []
-        for t in tasks:
-            if t.duration_minutes <= 0:
-                errors.append(f"Task '{t.title}' has non-positive duration.")
-        return errors
+    def get_todays_schedule(self, owner: Owner) -> List[tuple[Pet, Task]]:
+        """Return all owner tasks sorted by scheduled time."""
+        tasks = self.get_all_tasks(owner)
+        return sorted(tasks, key=lambda item: item[1].time)
 
-    def generate_daily_schedule(self, owner: Owner, pet: Pet, tasks: List[Task]) -> Tuple[List[ScheduleItem], List[str]]:
-        # TODO: implement greedy scheduler (sort by priority, pack until time exhausted)
-        scheduled: List[ScheduleItem] = []
-        explanations: List[str] = []
-        return scheduled, explanations
+    def mark_task_complete(self, task: Task) -> None:
+        """Mark a scheduled task as complete."""
+        task.mark_complete()
