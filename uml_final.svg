@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <style>
+    .bg { fill: #f7f4eb; }
+    .card { fill: #fffdf8; stroke: #2f3e46; stroke-width: 3; rx: 18; ry: 18; }
+    .title { font: 700 32px Helvetica, Arial, sans-serif; fill: #14213d; }
+    .body { font: 22px Helvetica, Arial, sans-serif; fill: #1f2933; }
+    .small { font: 700 20px Helvetica, Arial, sans-serif; fill: #7a5c1f; letter-spacing: 1px; }
+    .line { stroke: #2f3e46; stroke-width: 3; fill: none; }
+    .label { font: 20px Helvetica, Arial, sans-serif; fill: #2f3e46; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1100"/>
+
+  <rect class="card" x="70" y="90" width="350" height="250"/>
+  <text class="title" x="100" y="140">Owner</text>
+  <text class="small" x="100" y="182">Attributes</text>
+  <text class="body" x="100" y="220">name: str</text>
+  <text class="body" x="100" y="255">pets: List[Pet]</text>
+  <text class="small" x="100" y="305">Methods</text>
+  <text class="body" x="100" y="340">add_pet(pet)</text>
+  <text class="body" x="100" y="375">get_all_tasks()</text>
+
+  <rect class="card" x="625" y="90" width="350" height="300"/>
+  <text class="title" x="655" y="140">Pet</text>
+  <text class="small" x="655" y="182">Attributes</text>
+  <text class="body" x="655" y="220">name: str</text>
+  <text class="body" x="655" y="255">species: str</text>
+  <text class="body" x="655" y="290">age: int</text>
+  <text class="body" x="655" y="325">tasks: List[Task]</text>
+  <text class="small" x="655" y="370">Methods</text>
+  <text class="body" x="655" y="405">add_task(task)</text>
+  <text class="body" x="655" y="440">get_tasks()</text>
+
+  <rect class="card" x="1180" y="90" width="350" height="340"/>
+  <text class="title" x="1210" y="140">Task</text>
+  <text class="small" x="1210" y="182">Attributes</text>
+  <text class="body" x="1210" y="220">description: str</text>
+  <text class="body" x="1210" y="255">time: str</text>
+  <text class="body" x="1210" y="290">frequency: str</text>
+  <text class="body" x="1210" y="325">due_date: date</text>
+  <text class="body" x="1210" y="360">completed: bool</text>
+  <text class="small" x="1210" y="405">Methods</text>
+  <text class="body" x="1210" y="440">mark_complete()</text>
+
+  <rect class="card" x="360" y="560" width="880" height="420"/>
+  <text class="title" x="395" y="615">Scheduler</text>
+  <text class="small" x="395" y="660">Methods</text>
+  <text class="body" x="395" y="705">get_all_tasks(owner)</text>
+  <text class="body" x="395" y="745">sort_by_time(tasks)</text>
+  <text class="body" x="395" y="785">filter_by_status(owner, completed)</text>
+  <text class="body" x="395" y="825">filter_by_pet(owner, pet_name)</text>
+  <text class="body" x="395" y="865">get_todays_schedule(owner)</text>
+  <text class="body" x="395" y="905">detect_conflicts(owner)</text>
+  <text class="body" x="395" y="945">create_next_recurring_task(task)</text>
+  <text class="body" x="395" y="985">mark_task_complete(pet, task)</text>
+
+  <path class="line" d="M420 215 L625 215"/>
+  <text class="label" x="470" y="200">owns</text>
+  <text class="label" x="560" y="245">1..*</text>
+
+  <path class="line" d="M975 240 L1180 240"/>
+  <text class="label" x="1035" y="225">manages</text>
+  <text class="label" x="1115" y="270">1..*</text>
+
+  <path class="line" d="M580 560 L520 390 L520 270 L625 270"/>
+  <text class="label" x="430" y="455">queries owner/pets</text>
+
+  <path class="line" d="M1000 560 L1080 430 L1180 430"/>
+  <text class="label" x="1030" y="505">sorts/completes tasks</text>
+
+  <path class="line" d="M860 560 L860 390"/>
+  <text class="label" x="880" y="485">updates pets</text>
+
+  <text class="title" x="70" y="50">PawPal+ Final UML</text>
+</svg>
