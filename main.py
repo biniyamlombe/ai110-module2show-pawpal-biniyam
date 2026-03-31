@@ -1,3 +1,5 @@
+from datetime import date
+
 from pawpal_system import Owner, Pet, Scheduler, Task
 
 
@@ -52,6 +54,10 @@ def main() -> None:
             "Next recurring task created:",
             f"{next_task.due_date.isoformat()} {next_task.time} | {next_task.description}",
         )
+
+    next_slot = scheduler.find_next_available_slot(owner, date.today(), preferred_time="08:00")
+    if next_slot is not None:
+        print(f"Next available slot: {next_slot}")
 
     conflicts = scheduler.detect_conflicts(owner)
     print()

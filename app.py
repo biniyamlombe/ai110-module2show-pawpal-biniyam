@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import date
 from pawpal_system import Owner, Pet, Scheduler, Task
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
@@ -196,5 +197,14 @@ if all_tasks:
         st.table(build_task_rows(filtered_tasks))
     else:
         st.info("No tasks match the selected filters.")
+
+    st.markdown("### Smart Suggestion")
+    suggested_slot = scheduler.find_next_available_slot(owner, date.today())
+    if suggested_slot is not None:
+        st.success(
+            f"Next available slot for a new task today is {suggested_slot}."
+        )
+    else:
+        st.warning("No open scheduling slots were found for today.")
 else:
     st.warning("Add at least one pet and one task to see the schedule.")

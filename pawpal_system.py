@@ -51,6 +51,17 @@ class Owner:
 
 
 class Scheduler:
+    def _time_to_minutes(self, time_value: str) -> int:
+        """Convert an HH:MM time string into total minutes."""
+        hours, minutes = time_value.split(":")
+        return int(hours) * 60 + int(minutes)
+
+    def _minutes_to_time(self, total_minutes: int) -> str:
+        """Convert total minutes into an HH:MM time string."""
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+        return f"{hours:02d}:{minutes:02d}"
+
     def get_all_tasks(self, owner: Owner) -> List[tuple[Pet, Task]]:
         """Retrieve every pet task managed by an owner."""
         return owner.get_all_tasks()
@@ -101,6 +112,32 @@ class Scheduler:
                 )
 
         return warnings
+
+    def find_next_available_slot(
+        self,
+        owner: Owner,
+        due_date: date,
+        preferred_time: str = "08:00",
+        interval_minutes: int = 30,
+        end_time: str = "20:00",
+    ) -> str | None:
+        """Return the next open time slot on a date using fixed-size increments."""
+        occupied_slots = {
+            task.time
+            for _, task in self.get_all_tasks(owner)
+            if task.due_date == due_date
+        }
+
+        current_minutes = self._time_to_minutes(preferred_time)
+        end_minutes = self._time_to_minutes(end_time)
+
+        while current_minutes <= end_minutes:
+            candidate_time = self._minutes_to_time(current_minutes)
+            if candidate_time not in occupied_slots:
+                return candidate_time
+            current_minutes += interval_minutes
+
+        return None
 
     def create_next_recurring_task(self, task: Task) -> Task | None:
         """Create the next task instance for daily or weekly recurrence."""

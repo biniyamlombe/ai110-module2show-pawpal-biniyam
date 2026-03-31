@@ -30,6 +30,7 @@ Your final app should:
 - Filter tasks by pet and completion status in the Streamlit UI.
 - Automatically create the next daily or weekly task occurrence when a recurring task is completed.
 - Show lightweight scheduling conflict warnings when two tasks share the same date and time.
+- Suggest the next available scheduling slot for a new task based on existing tasks for the day.
 
 ## 📸 Demo
 
@@ -45,6 +46,17 @@ PawPal+ now includes a few lightweight scheduling features that make the system 
 - Tasks can be filtered by pet name or completion status.
 - Daily and weekly recurring tasks automatically create the next occurrence when completed.
 - The scheduler detects exact same-time conflicts and returns warning messages instead of crashing.
+- The scheduler can suggest the next open time slot for a new task using fixed time increments.
+
+## Agent Mode Extension
+
+For the optional extension, Agent Mode was used as a step-by-step implementation partner:
+
+- review the existing scheduler design and choose an extension that fit the current data model
+- implement a `find_next_available_slot(...)` algorithm without disrupting the earlier features
+- verify the change with an automated test and surface the result in the Streamlit UI
+
+This made it easier to extend the project incrementally while keeping the architecture consistent.
 
 ## Testing PawPal+
 
@@ -54,7 +66,7 @@ Run the automated tests with:
 ./.venv/bin/python -m pytest
 ```
 
-The current test suite verifies task completion, task addition, chronological sorting, daily recurrence, and exact-time conflict detection.
+The current test suite verifies task completion, task addition, chronological sorting, daily recurrence, exact-time conflict detection, and next-available-slot suggestions.
 
 Confidence Level: 4/5 stars based on the current passing test suite and manual CLI checks.
 

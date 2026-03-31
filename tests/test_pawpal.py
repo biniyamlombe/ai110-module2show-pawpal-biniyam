@@ -79,3 +79,23 @@ def test_detect_conflicts_flags_duplicate_task_times() -> None:
     assert "Conflict on 2026-03-31 at 08:00" in warnings[0]
     assert "Mochi: Morning walk" in warnings[0]
     assert "Luna: Take medication" in warnings[0]
+
+
+def test_find_next_available_slot_returns_next_open_time() -> None:
+    owner = Owner("Jordan")
+    scheduler = Scheduler()
+    mochi = Pet("Mochi", "dog", 4)
+
+    mochi.add_task(Task("Breakfast", "08:00", "Daily", due_date=date(2026, 3, 31)))
+    mochi.add_task(Task("Walk", "08:30", "Daily", due_date=date(2026, 3, 31)))
+    owner.add_pet(mochi)
+
+    next_slot = scheduler.find_next_available_slot(
+        owner,
+        due_date=date(2026, 3, 31),
+        preferred_time="08:00",
+        interval_minutes=30,
+        end_time="10:00",
+    )
+
+    assert next_slot == "09:00"
