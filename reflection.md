@@ -13,6 +13,17 @@ Based on the scenario, the three core actions a user should be able to perform a
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
+- UML summary (high level):
+  - Owner: holds owner information and constraints (name, available_minutes). Responsible for providing available time and preferences.
+  - Pet: holds pet details (name, species, preferences). Responsible for providing pet-specific constraints (e.g., needs medication, walks).
+  - Task: represents a single pet-care activity (title, duration_minutes, priority, optional preferred_time or recurrence). Responsible for describing an actionable unit to schedule.
+  - Scheduler: encapsulates scheduling logic and constraints evaluation (generate_daily_schedule(owner, pet, tasks)). Responsible for selecting and ordering tasks given constraints and producing human-readable explanations.
+
+- Responsibilities rationale:
+  - Keep data containers (Owner, Pet, Task) simple as dataclasses for testability.
+  - Put all decision logic in Scheduler to separate UI from algorithmic concerns.
+  - UI (Streamlit app) collects inputs and displays results but does not perform scheduling decisions.
+
 **b. Design changes**
 
 - Did your design change during implementation?
