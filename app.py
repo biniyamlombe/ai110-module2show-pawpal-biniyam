@@ -48,6 +48,23 @@ if "scheduler" not in st.session_state:
 owner = st.session_state.owner
 scheduler = st.session_state.scheduler
 
+
+def build_task_rows(tasks: list[tuple[Pet, Task]]) -> list[dict[str, str | bool]]:
+    rows: list[dict[str, str | bool]] = []
+    for pet, task in tasks:
+        rows.append(
+            {
+                "due date": task.due_date.isoformat(),
+                "time": task.time,
+                "pet": pet.name,
+                "species": pet.species,
+                "task": task.description,
+                "frequency": task.frequency,
+                "completed": task.completed,
+            }
+        )
+    return rows
+
 st.subheader("Owner Setup")
 owner_name = st.text_input("Owner name", value=owner.name)
 owner.name = owner_name
@@ -88,18 +105,7 @@ if owner.pets:
         selected_pet.add_task(Task(task_description, task_time, task_frequency))
         st.success(f"Added '{task_description}' for {selected_pet.name}.")
 
-    task_rows = []
-    for pet in owner.pets:
-        for task in pet.get_tasks():
-            task_rows.append(
-                {
-                    "pet": pet.name,
-                    "description": task.description,
-                    "time": task.time,
-                    "frequency": task.frequency,
-                    "completed": task.completed,
-                }
-            )
+    task_rows = build_task_rows(scheduler.get_todays_schedule(owner))
 
     if task_rows:
         st.write("Current tasks:")
@@ -144,26 +150,51 @@ else:
 
 st.divider()
 
-st.subheader("Build Schedule")
-st.caption("Generate a schedule from the tasks stored on your pets.")
+st.subheader("Schedule Overview")
+st.caption("View the smart schedule with sorting, filtering, and conflict warnings.")
 
-if st.button("Generate schedule"):
-    schedule = scheduler.get_todays_schedule(owner)
+all_tasks = scheduler.get_todays_schedule(owner)
 
-    if schedule:
-        st.write("Today's Schedule:")
-        schedule_rows = []
-        for pet, task in schedule:
-            schedule_rows.append(
-                {
-                    "time": task.time,
-                    "pet": pet.name,
-                    "species": pet.species,
-                    "task": task.description,
-                    "frequency": task.frequency,
-                    "completed": task.completed,
-                }
-            )
-        st.table(schedule_rows)
+if all_tasks:
+    conflicts = scheduler.detect_conflicts(owner)
+    if conflicts:
+        st.warning("Scheduling conflicts detected:")
+        for warning in conflicts:
+            st.warning(warning)
     else:
-        st.warning("Add at least one pet and one task before generating a schedule.")
+        st.success("No task conflicts detected.")
+
+    filter_col1, filter_col2 = st.columns(2)
+    with filter_col1:
+        pet_filter = st.selectbox(
+            "Filter by pet",
+            ["All pets"] + [pet.name for pet in owner.pets],
+        )
+    with filter_col2:
+        status_filter = st.selectbox(
+            "Filter by status",
+            ["All tasks", "Incomplete only", "Completed only"],
+        )
+
+    filtered_tasks = all_tasks
+    if pet_filter != "All pets":
+        filtered_tasks = scheduler.sort_by_time(
+            scheduler.filter_by_pet(owner, pet_filter)
+        )
+
+    if status_filter == "Incomplete only":
+        filtered_tasks = [
+            (pet, task) for pet, task in filtered_tasks if task.completed is False
+        ]
+    elif status_filter == "Completed only":
+        filtered_tasks = [
+            (pet, task) for pet, task in filtered_tasks if task.completed is True
+        ]
+
+    if filtered_tasks:
+        st.write("Today's Schedule:")
+        st.table(build_task_rows(filtered_tasks))
+    else:
+        st.info("No tasks match the selected filters.")
+else:
+    st.warning("Add at least one pet and one task to see the schedule.")
