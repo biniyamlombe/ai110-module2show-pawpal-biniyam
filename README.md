@@ -31,6 +31,18 @@ PawPal+ now includes a few lightweight scheduling features that make the system 
 - Daily and weekly recurring tasks automatically create the next occurrence when completed.
 - The scheduler detects exact same-time conflicts and returns warning messages instead of crashing.
 
+## Testing PawPal+
+
+Run the automated tests with:
+
+```bash
+./.venv/bin/python -m pytest
+```
+
+The current test suite verifies task completion, task addition, chronological sorting, daily recurrence, and exact-time conflict detection.
+
+Confidence Level: 4/5 stars based on the current passing test suite and manual CLI checks.
+
 ## Getting started
 
 ### Setup
