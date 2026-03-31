@@ -8,7 +8,7 @@ def print_task_list(title: str, tasks: list[tuple[Pet, Task]]) -> None:
     for pet, task in tasks:
         status = "Done" if task.completed else "Not Done"
         print(
-            f"{task.time} | {pet.name} ({pet.species}) | "
+            f"{task.due_date.isoformat()} {task.time} | {pet.name} ({pet.species}) | "
             f"{task.description} | {task.frequency} | {status}"
         )
     print()
@@ -30,7 +30,7 @@ def main() -> None:
 
     scheduler = Scheduler()
 
-    mochi.tasks[0].mark_complete()
+    next_task = scheduler.mark_task_complete(mochi, mochi.tasks[0])
 
     print_task_list("Today's Schedule", scheduler.get_todays_schedule(owner))
     print_task_list(
@@ -45,6 +45,12 @@ def main() -> None:
         "Incomplete Tasks",
         scheduler.sort_by_time(scheduler.filter_by_status(owner, False)),
     )
+
+    if next_task is not None:
+        print(
+            "Next recurring task created:",
+            f"{next_task.due_date.isoformat()} {next_task.time} | {next_task.description}",
+        )
 
 
 if __name__ == "__main__":

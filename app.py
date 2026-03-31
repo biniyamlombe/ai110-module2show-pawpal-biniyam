@@ -129,9 +129,14 @@ if owner.pets:
             )
 
             if st.button("Mark selected task complete"):
-                _, selected_task = completion_options[selected_task_label]
-                scheduler.mark_task_complete(selected_task)
+                selected_task_pet, selected_task = completion_options[selected_task_label]
+                next_task = scheduler.mark_task_complete(selected_task_pet, selected_task)
                 st.success(f"Marked '{selected_task.description}' as complete.")
+                if next_task is not None:
+                    st.info(
+                        f"Created next recurring task for {selected_task_pet.name} on "
+                        f"{next_task.due_date.isoformat()} at {next_task.time}."
+                    )
         else:
             st.success("All current tasks are already marked complete.")
 else:
