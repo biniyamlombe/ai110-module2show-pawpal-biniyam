@@ -49,4 +49,3 @@ classDiagram
     Scheduler "1" --o "*" ScheduleItem : produces
 `;
 module.exports = mermaidDiagram;
-// ...existing code...

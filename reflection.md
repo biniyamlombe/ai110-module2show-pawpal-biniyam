@@ -31,6 +31,32 @@ Based on the scenario, the three core actions a user should be able to perform a
 - If yes, describe at least one change and why you made it.
     - If time windows or recurring tasks are added, Task will gain start/end window attributes and Scheduler will need a timeline builder component.
 
+**c. Main objects (building blocks)**
+
+- Owner
+  - Attributes: name (str), available_minutes (int), preferences (dict, optional)
+  - Methods: update_availability(minutes), set_preference(key, value)
+  - Responsibility: represent the human user and time constraints.
+
+- Pet
+  - Attributes: name (str), species (str), needs (list[str] or dict)
+  - Methods: add_need(need), remove_need(need)
+  - Responsibility: hold pet-specific constraints (medication, walks, feeding).
+
+- Task
+  - Attributes: title (str), duration_minutes (int), priority (str: high|medium|low), preferred_time (optional), recurrence (optional)
+  - Methods: is_recurring(), fits_in(minutes_available)
+  - Responsibility: describe a schedulable unit of work.
+
+- Scheduler
+  - Attributes: none (stateless functions) or config (e.g., priority_weights)
+  - Methods: generate_daily_schedule(owner, pet, tasks) -> schedule, explain; validate_tasks(tasks)
+  - Responsibility: encapsulate scheduling decisions, honor constraints, and produce explanations.
+
+- (Optional) ScheduleItem / Timeline
+  - Attributes: task_ref, start_minute, end_minute
+  - Methods: duration(), overlaps(other)
+  - Responsibility: represent placed tasks on a timeline when producing start times.
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
