@@ -27,7 +27,9 @@ Based on the scenario, the three core actions a user should be able to perform a
 **b. Design changes**
 
 - Did your design change during implementation?
+    - Initially I considered embedding scheduling helpers directly in the UI module, but I refactored into a dedicated Scheduler class/module. Reason: improved testability, clearer separation of concerns, and easier local unit testing without the UI.
 - If yes, describe at least one change and why you made it.
+    - If time windows or recurring tasks are added, Task will gain start/end window attributes and Scheduler will need a timeline builder component.
 
 ---
 
