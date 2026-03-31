@@ -72,11 +72,15 @@ Based on the scenario, the three core actions a user should be able to perform a
 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
+- My scheduler currently considers task time, completion status, pet name, recurrence frequency, and exact same-time conflicts.
+- I treated time and recurrence as the most important constraints because they directly affect the daily schedule and are easy for a pet owner to understand in the app and CLI demo.
 
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
+- One tradeoff is that conflict detection only checks for exact matches on date and time instead of trying to detect overlapping time ranges.
+- This is reasonable for the current PawPal+ version because tasks only store a single time value, not full start and end durations, so exact-match warnings stay simple, readable, and reliable for a beginner-friendly scheduler.
 
 ---
 
