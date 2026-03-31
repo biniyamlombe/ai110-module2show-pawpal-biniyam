@@ -22,6 +22,21 @@ Your final app should:
 - Display the plan clearly (and ideally explain the reasoning)
 - Include tests for the most important scheduling behaviors
 
+## Features
+
+- Add and manage multiple pets for one owner.
+- Add pet-care tasks with times, recurrence, and completion tracking.
+- View a schedule sorted by time using the scheduler logic layer.
+- Filter tasks by pet and completion status in the Streamlit UI.
+- Automatically create the next daily or weekly task occurrence when a recurring task is completed.
+- Show lightweight scheduling conflict warnings when two tasks share the same date and time.
+
+## 📸 Demo
+
+Add a screenshot of your final Streamlit app here after you capture it.
+
+<a href="demo.png" target="_blank"><img src="demo.png" title="PawPal App" alt="PawPal App" /></a>
+
 ## Smarter Scheduling
 
 PawPal+ now includes a few lightweight scheduling features that make the system more useful:
