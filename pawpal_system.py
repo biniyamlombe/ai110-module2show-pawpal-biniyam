@@ -82,6 +82,26 @@ class Scheduler:
         tasks = self.get_all_tasks(owner)
         return self.sort_by_time(tasks)
 
+    def detect_conflicts(self, owner: Owner) -> List[str]:
+        """Return warning messages for tasks that share an exact date and time."""
+        tasks_by_slot: dict[tuple[date, str], List[tuple[Pet, Task]]] = {}
+
+        for pet, task in self.get_all_tasks(owner):
+            slot = (task.due_date, task.time)
+            tasks_by_slot.setdefault(slot, []).append((pet, task))
+
+        warnings: List[str] = []
+        for (due_date, time), slot_tasks in tasks_by_slot.items():
+            if len(slot_tasks) > 1:
+                task_labels = ", ".join(
+                    f"{pet.name}: {task.description}" for pet, task in slot_tasks
+                )
+                warnings.append(
+                    f"Conflict on {due_date.isoformat()} at {time}: {task_labels}"
+                )
+
+        return warnings
+
     def create_next_recurring_task(self, task: Task) -> Task | None:
         """Create the next task instance for daily or weekly recurrence."""
         frequency = task.frequency.lower()

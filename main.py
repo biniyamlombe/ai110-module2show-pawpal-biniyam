@@ -23,6 +23,7 @@ def main() -> None:
     mochi.add_task(Task("Dinner", "18:00", "Daily"))
     mochi.add_task(Task("Morning walk", "08:00", "Daily"))
     luna.add_task(Task("Play session", "12:00", "Weekly"))
+    luna.add_task(Task("Take medication", "08:00", "Daily"))
     luna.add_task(Task("Feed breakfast", "07:30", "Daily"))
 
     owner.add_pet(mochi)
@@ -51,6 +52,16 @@ def main() -> None:
             "Next recurring task created:",
             f"{next_task.due_date.isoformat()} {next_task.time} | {next_task.description}",
         )
+
+    conflicts = scheduler.detect_conflicts(owner)
+    print()
+    print("Conflict Warnings")
+    print("-" * 40)
+    if conflicts:
+        for warning in conflicts:
+            print(warning)
+    else:
+        print("No conflicts detected.")
 
 
 if __name__ == "__main__":
